@@ -27,7 +27,7 @@
 						}
 					},
 					"dataset": {
-						"referenceName": "cdc",
+						"referenceName": "json_dynamic",
 						"type": "DatasetReference"
 					},
 					"firstRowOnly": false
