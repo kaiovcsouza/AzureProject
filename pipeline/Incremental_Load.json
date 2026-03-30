@@ -3,8 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Load_Ref_Date",
-				"description": "Loads the reference date to perform incremental load.",
+				"name": "Read_Date",
 				"type": "Lookup",
 				"dependsOn": [],
 				"policy": {
@@ -30,8 +29,37 @@
 					"dataset": {
 						"referenceName": "cdc",
 						"type": "DatasetReference"
-					}
+					},
+					"firstRowOnly": false
 				}
+			},
+			{
+				"name": "SQL_to_DataLake",
+				"description": "Incremental load from SQL DB to Data Lake",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "aprojectsqldb",
+						"type": "DatasetReference"
+					}
+				]
 			}
 		],
 		"annotations": []
