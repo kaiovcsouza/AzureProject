@@ -57,7 +57,7 @@
 					"source": {
 						"type": "AzureSqlSource",
 						"sqlReaderQuery": {
-							"value": "SELECT\n    *\nFROM\n@{pipeline().parameters.schema}.@{pipeline().parameters.table}\nWHERE\n    updated_at > @{activity('Read_Date').output.value[0].cdc}",
+							"value": "SELECT\n    *\nFROM\n    @{pipeline().parameters.schema}.@{pipeline().parameters.table}\nWHERE\n    updated_at > @{activity('Read_Date').output.value[0].cdc}",
 							"type": "Expression"
 						},
 						"queryTimeout": "02:00:00",
