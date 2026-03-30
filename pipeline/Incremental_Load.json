@@ -54,15 +54,6 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"source": {
-						"type": "AzureSqlSource",
-						"sqlReaderQuery": {
-							"value": "SELECT\n    *\nFROM\n    @{pipeline().parameters.schema}.@{pipeline().parameters.table}\nWHERE\n    updated_at > @{activity('Read_Date').output.value[0].cdc}",
-							"type": "Expression"
-						},
-						"queryTimeout": "02:00:00",
-						"partitionOption": "None"
-					},
 					"sink": {
 						"type": "ParquetSink",
 						"storeSettings": {
@@ -72,32 +63,12 @@
 							"type": "ParquetWriteSettings"
 						}
 					},
-					"enableStaging": false,
-					"translator": {
-						"type": "TabularTranslator",
-						"typeConversion": true,
-						"typeConversionSettings": {
-							"allowDataTruncation": true,
-							"treatBooleanAsNumber": false
-						}
-					}
+					"enableStaging": false
 				},
-				"inputs": [
-					{
-						"referenceName": "aprojectsqldb",
-						"type": "DatasetReference"
-					}
-				],
 				"outputs": [
 					{
-						"referenceName": "BronzeDL",
-						"type": "DatasetReference",
-						"parameters": {
-							"folder": {
-								"value": "@pipeline().parameters.table",
-								"type": "Expression"
-							}
-						}
+						"referenceName": "DLParquet",
+						"type": "DatasetReference"
 					}
 				]
 			}
