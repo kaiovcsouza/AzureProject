@@ -1,0 +1,9 @@
+{
+	"name": "aprojectadfkaio",
+	"location": "brazilsouth",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "54906324-8bdf-46b9-8465-c3339e722db5",
+		"tenantId": "5d811487-8d7e-4b1f-acf6-217afe865f42"
+	}
+}
