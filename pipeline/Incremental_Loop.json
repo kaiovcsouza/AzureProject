@@ -8,6 +8,10 @@
 				"dependsOn": [],
 				"userProperties": [],
 				"typeProperties": {
+					"items": {
+						"value": "@pipeline().parameters.tables_input",
+						"type": "Expression"
+					},
 					"activities": [
 						{
 							"name": "Read_Date",
@@ -39,7 +43,7 @@
 									"parameters": {
 										"container": "bronze",
 										"folder": {
-											"value": "@{pipeline().parameters.table}_cdc",
+											"value": "@{item().table}_cdc",
 											"type": "Expression"
 										},
 										"file": "cdc.json"
@@ -78,7 +82,7 @@
 								"source": {
 									"type": "AzureSqlSource",
 									"sqlReaderQuery": {
-										"value": "SELECT\n    *\nFROM\n    @{pipeline().parameters.schema}.@{pipeline().parameters.table}\nWHERE\n    @{pipeline().parameters.cdc_column} >'@{if(empty(pipeline().parameters.backfilling_date),activity('Read_Date').output.value[0].cdc, pipeline().parameters.backfilling_date)}'\n    ",
+										"value": "SELECT\n    *\nFROM\n    @{item().schema}.@{item().table}\nWHERE\n    @{item().cdc_column} >'@{if(empty(item().backfilling_date),activity('Read_Date').output.value[0].cdc, item().backfilling_date)}'\n    ",
 										"type": "Expression"
 									},
 									"queryTimeout": "02:00:00",
@@ -116,11 +120,11 @@
 									"parameters": {
 										"container": "bronze",
 										"folder": {
-											"value": "@pipeline().parameters.table",
+											"value": "@item().table",
 											"type": "Expression"
 										},
 										"file": {
-											"value": "@concat(pipeline().parameters.table, '_', variables('current_date'), '.parquet')",
+											"value": "@concat(item().table, '_', variables('current_date'), '.parquet')",
 											"type": "Expression"
 										}
 									}
@@ -182,11 +186,11 @@
 												"parameters": {
 													"container": "bronze",
 													"folder": {
-														"value": "@pipeline().parameters.table",
+														"value": "@item().table",
 														"type": "Expression"
 													},
 													"file": {
-														"value": "@concat(pipeline().parameters.table, '_', variables('current_date'), '.parquet')",
+														"value": "@concat(item().table, '_', variables('current_date'), '.parquet')",
 														"type": "Expression"
 													}
 												}
@@ -222,7 +226,7 @@
 												{
 													"type": "Query",
 													"text": {
-														"value": "SELECT \n    MAX(@{pipeline().parameters.cdc_column}) as cdc\nFROM \n    @{pipeline().parameters.schema}.@{pipeline().parameters.table}",
+														"value": "SELECT \n    MAX(@{item().cdc_column}) as cdc\nFROM \n    @{item().schema}.@{item().table}",
 														"type": "Expression"
 													}
 												}
@@ -287,7 +291,10 @@
 												"type": "DatasetReference",
 												"parameters": {
 													"container": "bronze",
-													"folder": "@{pipeline().parameters.table}_cdc",
+													"folder": {
+														"value": "@{item().table}_cdc",
+														"type": "Expression"
+													},
 													"file": "empty.json"
 												}
 											}
@@ -298,7 +305,10 @@
 												"type": "DatasetReference",
 												"parameters": {
 													"container": "bronze",
-													"folder": "@{pipeline().parameters.table}_cdc",
+													"folder": {
+														"value": "@{item().table}_cdc",
+														"type": "Expression"
+													},
 													"file": "cdc.json"
 												}
 											}
@@ -312,18 +322,40 @@
 			}
 		],
 		"parameters": {
-			"schema": {
-				"type": "String",
-				"defaultValue": "dbo"
-			},
-			"table": {
-				"type": "String"
-			},
-			"cdc_column": {
-				"type": "String"
-			},
-			"backfilling_date": {
-				"type": "string"
+			"tables_input": {
+				"type": "array",
+				"defaultValue": [
+					{
+						"schema": "dbo",
+						"table": "DimUser",
+						"cdc_column": "updated_at",
+						"backfilling_date": ""
+					},
+					{
+						"schema": "dbo",
+						"table": "DimTrack",
+						"cdc_column": "updated_at",
+						"backfilling_date": ""
+					},
+					{
+						"schema": "dbo",
+						"table": "DimArtist",
+						"cdc_column": "updated_at",
+						"backfilling_date": ""
+					},
+					{
+						"schema": "dbo",
+						"table": "DimDate",
+						"cdc_column": "date",
+						"backfilling_date": ""
+					},
+					{
+						"schema": "dbo",
+						"table": "FactStream",
+						"cdc_column": "stream_timestamp",
+						"backfilling_date": ""
+					}
+				]
 			}
 		},
 		"variables": {
