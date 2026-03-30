@@ -9,10 +9,7 @@
 			"folder": {
 				"type": "string"
 			},
-			"tablename": {
-				"type": "string"
-			},
-			"date": {
+			"file": {
 				"type": "string"
 			}
 		},

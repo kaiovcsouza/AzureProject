@@ -37,7 +37,14 @@
 				"name": "SQL_to_DataLake",
 				"description": "Incremental load from SQL DB to Data Lake",
 				"type": "Copy",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Read_Date",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -49,6 +56,10 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
+						"sqlReaderQuery": {
+							"value": "SELECT\n    *\nFROM\n    @{pipeline().parameters.schema}.@{pipeline().parameters.table}\nWHERE\n    updated_at > @{activity('Read_Date').output.value[0].cdc}",
+							"type": "Expression"
+						},
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -80,11 +91,28 @@
 				"outputs": [
 					{
 						"referenceName": "BronzeDL",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"folder": {
+								"value": "@pipeline().parameters.table",
+								"type": "Expression"
+							}
+						}
 					}
 				]
 			}
 		],
+		"parameters": {
+			"schema": {
+				"type": "String"
+			},
+			"table": {
+				"type": "String"
+			},
+			"cdc": {
+				"type": "String"
+			}
+		},
 		"annotations": []
 	}
 }
