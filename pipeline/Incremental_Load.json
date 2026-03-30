@@ -45,7 +45,7 @@
 						]
 					},
 					{
-						"activity": "Current_date",
+						"activity": "Get_date",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -123,7 +123,7 @@
 				]
 			},
 			{
-				"name": "Current_date",
+				"name": "Get_date",
 				"type": "SetVariable",
 				"dependsOn": [],
 				"policy": {
@@ -135,6 +135,27 @@
 					"variableName": "date",
 					"value": {
 						"value": "@utcNow()",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "If Condition1",
+				"type": "IfCondition",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [
+					{
+						"activity": "SQL_to_DataLake",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@greater(activity('SQL_to_DataLake').output.dataRead, 0)",
 						"type": "Expression"
 					}
 				}
