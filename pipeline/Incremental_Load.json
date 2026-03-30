@@ -50,7 +50,7 @@
 						]
 					},
 					{
-						"activity": "Get_date",
+						"activity": "current_date",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -98,10 +98,6 @@
 						"referenceName": "aprojectsqldb",
 						"type": "DatasetReference",
 						"parameters": {
-							"schema": {
-								"value": "@pipeline().parameters.schema",
-								"type": "Expression"
-							},
 							"table": {
 								"value": "@pipeline().parameters.table",
 								"type": "Expression"
@@ -128,7 +124,7 @@
 				]
 			},
 			{
-				"name": "Get_date",
+				"name": "current_date",
 				"type": "SetVariable",
 				"dependsOn": [],
 				"policy": {
@@ -137,7 +133,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"variableName": "date",
+					"variableName": "current_date",
 					"value": {
 						"value": "@utcNow()",
 						"type": "Expression"
@@ -166,17 +162,21 @@
 		],
 		"parameters": {
 			"schema": {
-				"type": "String"
+				"type": "String",
+				"defaultValue": "dbo"
 			},
 			"table": {
 				"type": "String"
 			},
-			"cdc": {
+			"cdc_column": {
 				"type": "String"
 			}
 		},
 		"variables": {
 			"date": {
+				"type": "String"
+			},
+			"current_date": {
 				"type": "String"
 			}
 		},
