@@ -1,6 +1,7 @@
 {
 	"name": "Incremental_Loop",
 	"properties": {
+		"description": "Use incremental load pipelinea as a loop to run through all tables.",
 		"activities": [
 			{
 				"name": "Loop_Through_Tables",
