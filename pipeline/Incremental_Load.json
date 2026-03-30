@@ -43,6 +43,12 @@
 						"dependencyConditions": [
 							"Succeeded"
 						]
+					},
+					{
+						"activity": "Current_date",
+						"dependencyConditions": [
+							"Succeeded"
+						]
 					}
 				],
 				"policy": {
@@ -109,12 +115,29 @@
 								"type": "Expression"
 							},
 							"file": {
-								"value": "@concat(pipeline().parameters.table, '_', utcNow(), '.parquet')",
+								"value": "@concat(pipeline().parameters.table, '_', variables('date'), '.parquet')",
 								"type": "Expression"
 							}
 						}
 					}
 				]
+			},
+			{
+				"name": "Current_date",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "date",
+					"value": {
+						"value": "@utcNow()",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"parameters": {
@@ -125,6 +148,11 @@
 				"type": "String"
 			},
 			"cdc": {
+				"type": "String"
+			}
+		},
+		"variables": {
+			"date": {
 				"type": "String"
 			}
 		},
