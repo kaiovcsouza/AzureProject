@@ -84,7 +84,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "AzureSqlTable1",
+						"referenceName": "aprojectsqldb",
 						"type": "DatasetReference",
 						"parameters": {
 							"schema": {
