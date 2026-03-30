@@ -94,10 +94,6 @@
 							"table": {
 								"value": "@pipeline().parameters.table",
 								"type": "Expression"
-							},
-							"cdc_date": {
-								"value": "@activity('Read_Date').output.value[0].cdc",
-								"type": "Expression"
 							}
 						}
 					}
