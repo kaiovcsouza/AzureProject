@@ -328,7 +328,6 @@
 					{
 						"activity": "Loop_Through_Tables",
 						"dependencyConditions": [
-							"Succeeded",
 							"Failed"
 						]
 					}
